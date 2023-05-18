@@ -1,28 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class player : MonoBehaviour
+public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    
+    [SerializeField] private Transform m_transform;
+    private float y;
+    private void Start()
     {
-        
+       y = transform.position.y;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector2 position = new Vector2(0,0);
-        if(Input.GetKey(KeyCode.LeftArrow))
-        position.x--;
+        
+        Vector3 forward = transform.forward;
+        Vector3 right = Vector3.Cross(forward, new Vector3(0,1,0));
+        if (Input.GetKey(KeyCode.LeftArrow))
+            m_transform.position -=right;
         if(Input.GetKey(KeyCode.RightArrow))
-        position.x++;
-        if(Input.GetKey(KeyCode.UpArrow))
-        position.y++;
+            m_transform.position+=right;
+        if (Input.GetKey(KeyCode.UpArrow))
+            m_transform.position -= forward;
         if(Input.GetKey(KeyCode.DownArrow))
-        position.y--;
-        position = position.normalized;
-        transform.position += new Vector3(position.x,0, position.y);
+            m_transform.position+=forward;
+        m_transform.position.Set(m_transform.position.x,y, m_transform.position.z);
+
+        
+        
     }
 }
